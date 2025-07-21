@@ -37,11 +37,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <HeaderTop />
-          <main className="w-11/12 lg:w-10/12">
-            <Header />
-            {children}
-          </main>
+          <div className="sticky top-0 flex flex-col z-10 w-full mx-auto items-center justify-center">
+            <HeaderTop />
+                   <div className="w-11/12 lg:w-10/12">
+              <Header />
+            </div>
+          </div>
+          <main className="w-11/12 lg:w-10/12">{children}</main>
         </ThemeProvider>
       </body>
     </html>

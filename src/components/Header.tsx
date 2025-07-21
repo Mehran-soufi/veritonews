@@ -14,13 +14,13 @@ import {
 function Header() {
   const { setTheme } = useTheme();
   return (
-    <header className="flex flex-col gap-2 py-4">
+    <header className="flex flex-col gap-2 py-4 bg-background">
       <nav className="flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
           <Link className="relative w-20 sm:w-24 lg:w-28" href="/">
             <Image
-              src="https://ik.imagekit.io/h9lpdqryj/verito/logo/logo.png?updatedAt=1752837828426&tr=w-1300%2Ch-400%2Cfo-custom%2Ccm-extract"
+              src="/general/logo.webp"
               alt="verito news logo"
               width={100}
               height={100}

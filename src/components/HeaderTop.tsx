@@ -3,7 +3,7 @@ import Time from './Time'
 
 function HeaderTop() {
   return (
-     <div className="w-full flex items-center justify-center bg-accent">
+     <div className="w-full flex items-center justify-center bg-accent sticky top-0">
         <Time/>
      </div>
   )
