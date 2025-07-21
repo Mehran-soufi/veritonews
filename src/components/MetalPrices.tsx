@@ -6,14 +6,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { apiKeyPrice } from "./PreviewHero";
-
+import { apiKeyPrice } from "@/lib/config";
 
 interface MetalPrice {
   name: string;
   price: number;
   updated: number;
 }
+
 
 const commodities = ["gold", "aluminum", "platinum", "palladium"];
 async function getMetalPrices(): Promise<MetalPrice[]> {
@@ -47,16 +47,18 @@ export default async function MetalPrices() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {metals.map((item,index) => (
-              <TableRow key={index}>
-                <TableCell>{item.name.charAt(0).toUpperCase() + item.name.slice(1)}</TableCell>
-                <TableCell>{item.price.toFixed(2)}$</TableCell>
-                <TableCell>{new Date(item.updated * 1000).toLocaleTimeString()}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-
-
+          {metals.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell>
+                {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
+              </TableCell>
+              <TableCell>{item.price.toFixed(2)}$</TableCell>
+              <TableCell>
+                {new Date(item.updated * 1000).toLocaleTimeString()}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
     </div>
   );

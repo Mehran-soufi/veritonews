@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import PreviewHero from "@/components/PreviewHero";
+import { apiKeyNews } from "@/lib/config";
 
-export const apiKeyNews = process.env.NEXT_PUBLIC_APP_NEWS_API_KEY ?? "";
 
 export interface TopNewsType {
   id: number;

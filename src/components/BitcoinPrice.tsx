@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { apiKeyPrice } from "./PreviewHero";
+import { apiKeyPrice } from "@/lib/config";
 
 
 interface BitcoinPrice {
