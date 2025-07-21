@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import PreviewHero from "@/components/PreviewHero";
 
-export const apiKey = process.env.NEXT_PUBLIC_APP_NEWS_API_KEY;
+export const apiKeyNews = process.env.NEXT_PUBLIC_APP_NEWS_API_KEY ?? "";
 
 export interface TopNewsType {
   id: number;
@@ -21,7 +21,7 @@ export interface TopNewsType {
 async function getTopNews(): Promise<TopNewsType[] | null> {
   try {
     const res = await fetch(
-      `https://api.worldnewsapi.com/top-news?source-country=us&language=en&api-key=${apiKey}`
+      `https://api.worldnewsapi.com/top-news?source-country=us&language=en&api-key=${apiKeyNews}`
     );
 
     if (!res.ok) {

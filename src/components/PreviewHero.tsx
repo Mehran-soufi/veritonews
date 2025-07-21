@@ -3,6 +3,9 @@ import MetalPrices from "@/components/MetalPrices";
 import Title from "@/components/Title";
 import NewsPaperComponent from "./NewsPaperComponent";
 
+export const apiKeyPrice = process.env.NEXT_PUBLIC_APP_Price_API_KEY ?? "";
+ 
+
 function PreviewHero() {
   return (
     <div className="flex md:items-stretch md:flex-row flex-col gap-2">

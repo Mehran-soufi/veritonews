@@ -6,8 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { apiKeyPrice } from "./PreviewHero";
 
-const apiKey = process.env.NEXT_PUBLIC_APP_Price_API_KEY ?? "";
 
 interface MetalPrice {
   name: string;
@@ -20,7 +20,7 @@ async function getMetalPrices(): Promise<MetalPrice[]> {
   try {
     const requests = commodities.map((name) =>
       fetch(`https://api.api-ninjas.com/v1/commodityprice?name=${name}`, {
-        headers: { "X-Api-Key": apiKey },
+        headers: { "X-Api-Key": apiKeyPrice },
       }).then((res) => res.json())
     );
 

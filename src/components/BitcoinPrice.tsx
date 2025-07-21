@@ -6,8 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { apiKeyPrice } from "./PreviewHero";
 
-const apiKey = process.env.NEXT_PUBLIC_APP_Price_API_KEY ?? "";
 
 interface BitcoinPrice {
   price: string;
@@ -22,7 +22,7 @@ interface BitcoinPrice {
 async function getBitcoinPrices(): Promise<BitcoinPrice | null> {
   try {
    const requests = await fetch("https://api.api-ninjas.com/v1/bitcoin", {
-      headers: { "X-Api-Key": apiKey },
+      headers: { "X-Api-Key": apiKeyPrice },
     });
 
     if (!requests.ok) {
