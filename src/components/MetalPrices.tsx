@@ -28,7 +28,6 @@ async function getMetalPrices(): Promise<MetalPrice[]> {
 
     return results;
   } catch (error) {
-    console.error("Error:", error);
     return [];
   }
 }

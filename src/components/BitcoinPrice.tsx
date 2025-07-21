@@ -30,11 +30,9 @@ async function getBitcoinPrices(): Promise<BitcoinPrice | null> {
     }
 
     const result: BitcoinPrice = await requests.json();
-    console.log(result);
 
     return result;
   } catch (error) {
-    console.error("Error:", error);
     return null;
   }
 }

@@ -12,6 +12,9 @@ import "swiper/css/thumbs";
 // import required modules
 import { FreeMode, Navigation } from "swiper/modules";
 import Image from "next/image";
+import { Button } from "./ui/button";
+import { FileDown, MoveLeft } from "lucide-react";
+import Link from "next/link";
 
 interface NewsPaperDataType {
   title: string;
@@ -93,8 +96,23 @@ const categoryMap = {
 
 function NewsPapers({ category }: { category: string }) {
   const [selectedData, setSelectedData] = useState<NewsPaperDataType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<NewsPaperDataType | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (selectedItem) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedItem]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -126,44 +144,89 @@ function NewsPapers({ category }: { category: string }) {
   }
 
   return (
-    <div className="w-full h-full">
-      <Swiper
-        spaceBetween={10}
-        slidesPerView={1.2}
-        breakpoints={{
-          480: {
-            slidesPerView: 2.2,
-          },
-          768: {
-            slidesPerView: 2.7,
-          },
-          1024: {
-            slidesPerView: 3.4,
-          },
-        }}
-        navigation={true}
-        modules={[FreeMode, Navigation]}
-        className="mySwiper1 w-full h-full"
-      >
-        {selectedData.map((item) => (
-          <SwiperSlide key={item.title}>
-            <div className="w-full h-full flex flex-col items-center shadow-md shadow-accent p-2 cursor-pointer">
-              <div className="w-full h-[300px] md:h-[85%] relative">
-                <Image
-                  src={item.url}
-                  alt={item.title}
-                  fill
-                  className="object-center"
-                />
+    <>
+      <div className="w-full h-full">
+        <Swiper
+          spaceBetween={10}
+          slidesPerView={1.2}
+          breakpoints={{
+            480: {
+              slidesPerView: 2.2,
+            },
+            768: {
+              slidesPerView: 2.7,
+            },
+            1024: {
+              slidesPerView: 3.4,
+            },
+          }}
+          navigation={true}
+          modules={[FreeMode, Navigation]}
+          className="mySwiper1 w-full h-full"
+        >
+          {selectedData.map((item) => (
+            <SwiperSlide key={item.title}>
+              <div
+                className="w-full h-full group flex flex-col items-center shadow-md shadow-accent p-2 cursor-pointer"
+                onClick={() => setSelectedItem(item)}
+              >
+                <div className="w-full h-[300px] md:h-[85%] relative overflow-hidden">
+                  <Image
+                    src={item.url}
+                    alt={item.title}
+                    fill
+                    className="object-center group-hover:scale-110 transition duration-200 ease-linear"
+                  />
+                </div>
+                <div className="w-full h-[15%] flex items-center justify-center">
+                  <p className="text-center font-semibold">{item.title}</p>
+                </div>
               </div>
-              <div className="w-full h-[15%] flex items-center justify-center">
-                <p className="text-center font-semibold">{item.title}</p>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+      {selectedItem && (
+        <div className="fixed top-0 left-0 w-full h-screen bg-accent/90 z-50 flex items-center justify-center">
+          <div className="w-11/12 lg:w-10/12 h-11/12 flex items-center flex-col gap-8 overflow-y-auto">
+            {/* Detail */}
+            <div className="flex items-center justify-between w-full sticky top-0 bg-accent/80 z-20">
+              {/* Title */}
+              <div className="flex items-center lg:gap-4 md:gap-2 gap-1">
+                <Button
+                  variant="outline"
+                  className="p-4 bg-transparent border-none outline-none hover:bg-transparent shadow-none"
+                  onClick={() => setSelectedItem(null)}
+                >
+                  <MoveLeft />
+                </Button>
+                <span className="font-semibold text-ring text-lg">
+                  {selectedItem.title}
+                </span>
+                <span className="font-semibold text-ring text-lg">
+                  ({category})
+                </span>
+              </div>
+              {/* Download */}
+              <div className="flex items-center">
+                <Link
+                  href={selectedItem.url}
+                  target="_blank"
+                  download
+                  className="text-chart-2"
+                >
+                  <FileDown />
+                </Link>
               </div>
             </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+            {/* Newspaper Image */}
+            <div className="md:w-3/5 w-11/12 min-h-full relative overflow-y-auto z-10">
+              <Image src={selectedItem.url} alt={selectedItem.title} fill />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
