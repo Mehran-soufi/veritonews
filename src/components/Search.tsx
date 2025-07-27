@@ -25,18 +25,35 @@ function SearchComponent({
       const url = `https://api.worldnewsapi.com/search-news?text=${subject}&language=en&api-key=${apiKeyNews}`;
 
       const res = await fetch(url);
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error(`API Error Response for search:`, errorData);
+        seterror(true);
+        setLoading(false);
+        return;
+      }
+
       const data = await res.json();
       setLoading(false);
       seterror(false);
       setSearchRes(data.news);
-      return { news: data.news || [], error: null };
-    } catch (error: any) {
+    } catch (error: unknown) {
       seterror(true);
-      console.error("Fetch error in getDubjectNews:", error);
-      return {
-        news: null,
-        error: error.message || "An unexpected error occurred.",
-      };
+      console.error("Fetch error in getSearchtNews:", error);
+
+      // Safely extract error message
+      let errorMessage = "An unexpected error occurred.";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error
+      ) {
+        errorMessage = String((error as { message: unknown }).message);
+      }
+      setLoading(false);
     }
   }
 
@@ -90,57 +107,71 @@ function SearchComponent({
                   className="w-full md:h-24 h-48 bg-muted animate-pulse"
                 ></div>
               ))}
-            {error && (
-              <div className="flex flex-col gap4">
-                <p className="text-lg font-semibold">No news found!</p>
-                <span>Search with another word.</span>
+            {error && !loading && (
+              <div className="flex flex-col gap-4">
+                <p className="text-lg font-semibold">
+                  No news found or an error occurred!
+                </p>
+                <span>
+                  Please try searching with another word or check your
+                  connection.
+                </span>
               </div>
             )}
-            {!loading && !error && searchRes && (
+            {!loading && !error && searchRes && searchRes.length > 0 && (
               <>
                 <div className="w-full ">
                   <p className="font-semibold">Result :</p>
                 </div>
                 {/* Result */}
                 <div className="w-full flex flex-col gap-4">
-                  {searchRes &&
-                    searchRes.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={`/news/${item.id.toString()}`}
-                        target="_blank"
-                        className="w-full md:h-24 h-48 bg-accent/50 border border-accent flex flex-col md:flex-row
-                 items-center gap-2 rounded-md overflow-hidden hover:shadow shadow-accent"
-                      >
-                        <div className="md:w-1/3 w-full md:h-full h-2/3 p-2">
-                          <VeritoImage alt="verito search" image={item.image} />
+                  {searchRes.map((item) => (
+                    <Link
+                      key={item.id}
+                      href={`/news/${item.id.toString()}`}
+                      target="_blank"
+                      className="w-full md:h-24 h-48 bg-accent/50 border border-accent flex flex-col md:flex-row
+              items-center gap-2 rounded-md overflow-hidden hover:shadow shadow-accent"
+                    >
+                      <div className="md:w-1/3 w-full md:h-full h-2/3 p-2">
+                        <VeritoImage alt="verito search" image={item.image} />
+                      </div>
+                      <div className="md:w-2/3 w-full md:h-full h-1/3 flex flex-col justify-between px-2 py-1">
+                        <div className="">
+                          <p className="line-clamp-1 text-sm font-semibold text-ellipsis overflow-hidden">
+                            {item.title}
+                          </p>
                         </div>
-                        <div className="md:w-2/3 w-full md:h-full h-1/3 flex flex-col justify-between px-2 py-1">
-                          <div className="">
-                            <p className="line-clamp-1 text-sm font-semibold text-ellipsis overflow-hidden">
-                              {item.title}
-                            </p>
-                          </div>
-                          <div className="w-full flex items-center justify-between text-sm font-sans font-semibold text-muted-foreground">
-                            <p className="flex items-center gap-1">
-                              <Calendar size={16} />
-                              {item.publish_date
-                                ? new Date(
-                                    item.publish_date
-                                  ).toLocaleDateString()
-                                : "N/A"}
-                            </p>
-                            <p className="flex items-center gap-1">
-                              <MapPin size={16} />
-                              {item.source_country || "N/A"}
-                            </p>
-                          </div>
+                        <div className="w-full flex items-center justify-between text-sm font-sans font-semibold text-muted-foreground">
+                          <p className="flex items-center gap-1">
+                            <Calendar size={16} />
+                            {item.publish_date
+                              ? new Date(item.publish_date).toLocaleDateString()
+                              : "N/A"}
+                          </p>
+                          <p className="flex items-center gap-1">
+                            <MapPin size={16} />
+                            {item.source_country || "N/A"}
+                          </p>
                         </div>
-                      </Link>
-                    ))}
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </>
             )}
+            {!loading &&
+              !error &&
+              searchRes &&
+              searchRes.length === 0 &&
+              subject !== "" && (
+                <div className="flex flex-col gap-4">
+                  <p className="text-lg font-semibold">
+                    No results for "{subject}".
+                  </p>
+                  <span>Please try a different search term.</span>
+                </div>
+              )}
           </div>
         </div>
       </div>
