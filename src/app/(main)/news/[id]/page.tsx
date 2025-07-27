@@ -7,6 +7,12 @@ import Link from "next/link";
 
 import { getDomainName } from "@/utils/urlHelpers";
 
+interface NewsPageProps {
+  params: {
+    id: string;
+  };
+}
+
 async function getNews({ id }: { id: string }): Promise<TopNewsType[] | null> {
   try {
     const res = await fetch(
@@ -20,9 +26,9 @@ async function getNews({ id }: { id: string }): Promise<TopNewsType[] | null> {
 }
 
 interface SentimentDisplay {
-  icon: React.ElementType; 
+  icon: React.ElementType;
   text: string;
-  colorClass: string; 
+  colorClass: string;
 }
 
 function getSentimentDisplay(score: number | undefined): SentimentDisplay {
@@ -39,7 +45,7 @@ function getSentimentDisplay(score: number | undefined): SentimentDisplay {
   }
 }
 
-export default async function NewsPage({ params }: { params: { id: string } }) {
+export default async function NewsPage({ params }: NewsPageProps) {
   const news: TopNewsType[] | null = await getNews({ id: params.id });
 
   if (!news || news.length === 0) {
