@@ -12,7 +12,7 @@ function SearchComponent({
   setSearchSelect,
 }: {
   searchSelect: boolean;
-  setSearchSelect: any;
+  setSearchSelect: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [subject, setSubject] = useState<string>("");
   const [searchRes, setSearchRes] = useState<TopNewsType[] | null>(null);
@@ -85,7 +85,10 @@ function SearchComponent({
           <div className="w-full h-full overflow-y-auto flex flex-col gap-4">
             {loading &&
               Array.from({ length: 5 }).map((_, index) => (
-                <div key={index} className="w-full md:h-24 h-48 bg-muted animate-pulse"></div>
+                <div
+                  key={index}
+                  className="w-full md:h-24 h-48 bg-muted animate-pulse"
+                ></div>
               ))}
             {error && (
               <div className="flex flex-col gap4">

@@ -7,12 +7,6 @@ interface NewsResult {
   error: string | null;
 }
 
-/**
- * fetches news data for a given subject from the WorldNewsAPI.
- * Includes caching and error handling.
- * @param subject The news subject to search for (e.g., "sport", "politics").
- * @returns A Promise resolving to NewsResult containing news articles or an error.
- */
 export async function fetchNewsData(subject: string): Promise<NewsResult> {
   try {
     const url = `https://api.worldnewsapi.com/search-news?text=${subject}&language=en&api-key=${apiKeyNews}`;
@@ -28,19 +22,23 @@ export async function fetchNewsData(subject: string): Promise<NewsResult> {
     }
     const data = await res.json();
     return { news: data.news || [], error: null };
-  } catch (error: any) {
+  } catch (error: unknown) { 
     console.error(`Fetch error for ${subject}:`, error);
+
+    let errorMessage = "An unexpected error occurred.";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'object' && error !== null && 'message' in error) {
+      errorMessage = String((error as { message: unknown }).message);
+    }
+    
     return {
       news: null,
-      error: error.message || "An unexpected error occurred.",
+      error: errorMessage,
     };
   }
 }
 
-/**
- * Fetches top news data. Currently uses fetchNewsData with a generic "top news" subject.
- * @returns A Promise resolving to an array of TopNewsType or null if an error occurs.
- */
 export async function getTopNewsData(): Promise<TopNewsType[] | null> {
   const result = await fetchNewsData("top news");
   if (result.error) {

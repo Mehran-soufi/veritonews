@@ -4,7 +4,7 @@ import { House } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-function notFound() {
+export default function NotFound() {
   const navigate = useRouter();
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-4">
@@ -24,5 +24,3 @@ function notFound() {
     </div>
   );
 }
-
-export default notFound;
