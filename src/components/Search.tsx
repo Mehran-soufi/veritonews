@@ -7,20 +7,35 @@ import VeritoImage from "./VeritoImage";
 import { TopNewsType } from "@/typs/news";
 import { apiKeyNews } from "@/lib/config";
 
+interface SearchComponentProps {
+  searchSelect: boolean;
+  setSearchSelect: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 function SearchComponent({
   searchSelect,
   setSearchSelect,
-}: {
-  searchSelect: boolean;
-  setSearchSelect: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}: SearchComponentProps) {
   const [subject, setSubject] = useState<string>("");
   const [searchRes, setSearchRes] = useState<TopNewsType[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, seterror] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorMessageDisplay, setErrorMessageDisplay] = useState<string | null>(
+    null
+  );
 
   async function getSearchtNews() {
+    if (subject.trim() === "") {
+      setSearchRes([]);
+      setHasError(false);
+      setErrorMessageDisplay("Please enter a search term.");
+      return;
+    }
+
     setLoading(true);
+    setHasError(false);
+    setErrorMessageDisplay(null);
+
     try {
       const url = `https://api.worldnewsapi.com/search-news?text=${subject}&language=en&api-key=${apiKeyNews}`;
 
@@ -29,30 +44,38 @@ function SearchComponent({
       if (!res.ok) {
         const errorData = await res.json();
         console.error(`API Error Response for search:`, errorData);
-        seterror(true);
+        setHasError(true);
+        setErrorMessageDisplay(
+          errorData.message || `Error: ${res.statusText}. Please try again.`
+        );
         setLoading(false);
         return;
       }
 
       const data = await res.json();
       setLoading(false);
-      seterror(false);
+      setHasError(false);
       setSearchRes(data.news);
+
+      if (!data.news || data.news.length === 0) {
+        setErrorMessageDisplay(`No results found for "${subject}".`);
+      }
     } catch (error: unknown) {
-      seterror(true);
+      setHasError(true);
       console.error("Fetch error in getSearchtNews:", error);
 
-      // Safely extract error message
-      let errorMessage = "An unexpected error occurred.";
+      let msg =
+        "An unexpected error occurred. Please check your internet connection.";
       if (error instanceof Error) {
-        errorMessage = error.message;
+        msg = error.message;
       } else if (
         typeof error === "object" &&
         error !== null &&
         "message" in error
       ) {
-        errorMessage = String((error as { message: unknown }).message);
+        msg = String((error as { message: unknown }).message);
       }
+      setErrorMessageDisplay(msg);
       setLoading(false);
     }
   }
@@ -62,6 +85,10 @@ function SearchComponent({
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+      setSearchRes(null);
+      setSubject("");
+      setHasError(false);
+      setErrorMessageDisplay(null);
     }
     return () => {
       document.body.style.overflow = "";
@@ -107,18 +134,17 @@ function SearchComponent({
                   className="w-full md:h-24 h-48 bg-muted animate-pulse"
                 ></div>
               ))}
-            {error && !loading && (
+
+            {hasError && !loading && (
               <div className="flex flex-col gap-4">
                 <p className="text-lg font-semibold">
-                  No news found or an error occurred!
+                  {errorMessageDisplay || "An unknown error occurred."}
                 </p>
-                <span>
-                  Please try searching with another word or check your
-                  connection.
-                </span>
+                <span>Please refine your search or try again later.</span>
               </div>
             )}
-            {!loading && !error && searchRes && searchRes.length > 0 && (
+
+            {!loading && !hasError && searchRes && searchRes.length > 0 && (
               <>
                 <div className="w-full ">
                   <p className="font-semibold">Result :</p>
@@ -134,7 +160,16 @@ function SearchComponent({
               items-center gap-2 rounded-md overflow-hidden hover:shadow shadow-accent"
                     >
                       <div className="md:w-1/3 w-full md:h-full h-2/3 p-2">
-                        <VeritoImage alt="verito search" image={item.image} />
+                        {item.image ? (
+                          <VeritoImage
+                            alt={item.title || "news image"}
+                            image={item.image}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                            No Image
+                          </div>
+                        )}
                       </div>
                       <div className="md:w-2/3 w-full md:h-full h-1/3 flex flex-col justify-between px-2 py-1">
                         <div className="">
@@ -160,16 +195,29 @@ function SearchComponent({
                 </div>
               </>
             )}
+
+            {/* Display message for empty results or initial state */}
             {!loading &&
-              !error &&
+              !hasError &&
               searchRes &&
               searchRes.length === 0 &&
-              subject !== "" && (
+              subject.trim() !== "" && (
                 <div className="flex flex-col gap-4">
                   <p className="text-lg font-semibold">
-                    No results for "{subject}".
+                    No results for &quot;{subject}&quot;.
                   </p>
                   <span>Please try a different search term.</span>
+                </div>
+              )}
+            {!loading &&
+              !hasError &&
+              searchRes === null &&
+              subject.trim() === "" && (
+                <div className="flex flex-col gap-4">
+                  <p className="text-lg font-semibold">
+                    Start typing to search for news.
+                  </p>
+                  <span>Enter a keyword in the search box above.</span>
                 </div>
               )}
           </div>
