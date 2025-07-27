@@ -5,7 +5,7 @@ import NewsPaperComponent from "./NewsPaperComponent";
   
 function PreviewHero() {
   return (
-    <div className="flex md:items-stretch md:flex-row flex-col gap-2">
+    <div className="flex md:items-stretch md:flex-row flex-col-reverse gap-2">
       <div className="md:w-3/4 w-full flex flex-col gap-4">
         <NewsPaperComponent />
       </div>

@@ -15,6 +15,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { FileDown, MoveLeft } from "lucide-react";
 import Link from "next/link";
+import VeritoImage from "./VeritoImage";
 
 interface NewsPaperDataType {
   title: string;
@@ -221,6 +222,7 @@ function NewsPapers({ category }: { category: string }) {
             </div>
             {/* Newspaper Image */}
             <div className="md:w-3/5 w-11/12 min-h-full relative overflow-y-auto z-10">
+             <VeritoImage image={selectedItem.url} alt={selectedItem.title} />
               <Image src={selectedItem.url} alt={selectedItem.title} fill />
             </div>
           </div>

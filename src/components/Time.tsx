@@ -4,19 +4,23 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 function Time() {
-  const [dateTime, setDateTime] = useState<React.ReactNode>(
-    new Date().toLocaleString()
-  );
+  const [dateTime, setDateTime] = useState("");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     const interval = setInterval(() => {
       setDateTime(new Date().toLocaleString());
     }, 1000);
+
     return () => clearInterval(interval);
   }, []);
 
+  if (!mounted) return null;
+
   return (
-    <div className="w-11/12 lg:w-10/12 sticky top-0 flex items-center justify-center sm:justify-between  py-2">
+    <div className="w-11/12 lg:w-10/12 flex items-center justify-center sm:justify-between  py-2">
       {/* Icon */}
       <div className="hidden sm:inline-flex">
         <ul className="flex items-center gap-4">
@@ -40,6 +44,15 @@ function Time() {
           <li className="cursor-pointer">
             {" "}
             <Image src="/svg/x.svg" alt="instagram" width={20} height={20} />
+          </li>
+          <li className="cursor-pointer">
+            {" "}
+            <Image
+              src="/svg/youtube.svg"
+              alt="instagram"
+              width={20}
+              height={20}
+            />
           </li>
         </ul>
       </div>

@@ -7,7 +7,7 @@ import React from "react";
 function notFound() {
   const navigate = useRouter();
   return (
-    <div className="w-full h-[80vh] flex flex-col items-center justify-center gap-4">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-4">
       <h2 className="font-bold lg:text-9xl md:text-8xl text-5xl text-destructive">
         404
       </h2>

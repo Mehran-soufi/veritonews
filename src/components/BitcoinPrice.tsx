@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/table";
 import { apiKeyPrice } from "@/lib/config";
 
-
 interface BitcoinPrice {
   price: string;
   timestamp: number;
@@ -21,7 +20,7 @@ interface BitcoinPrice {
 
 async function getBitcoinPrices(): Promise<BitcoinPrice | null> {
   try {
-   const requests = await fetch("https://api.api-ninjas.com/v1/bitcoin", {
+    const requests = await fetch("https://api.api-ninjas.com/v1/bitcoin", {
       headers: { "X-Api-Key": apiKeyPrice },
     });
 
@@ -69,9 +68,9 @@ export default async function BitcoinPrice() {
             <TableRow>
               <TableCell
                 colSpan={4}
-                className="text-center text-muted-foreground"
+                className="text-center text-sm font-sans font-semibold text-muted-foreground"
               >
-                ⛔ اطلاعاتی از بیت‌کوین دریافت نشد
+                There was a problem. There is no information to display.
               </TableCell>
             </TableRow>
           )}

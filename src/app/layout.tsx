@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-import Header from "@/components/Header";
-import HeaderTop from "@/components/HeaderTop";
 import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
@@ -29,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full flex flex-col  items-center mx-auto`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full min-h-screen flex flex-col justify-center  items-center mx-auto`}
       >
         <ThemeProvider
           attribute="class"
@@ -37,13 +35,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="sticky top-0 flex flex-col z-10 w-full mx-auto items-center justify-center">
-            <HeaderTop />
-                   <div className="w-11/12 lg:w-10/12">
-              <Header />
-            </div>
-          </div>
-          <main className="w-11/12 lg:w-10/12">{children}</main>
+          <main className="w-full">{children}</main>
         </ThemeProvider>
       </body>
     </html>

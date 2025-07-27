@@ -14,7 +14,6 @@ interface MetalPrice {
   updated: number;
 }
 
-
 const commodities = ["gold", "aluminum", "platinum", "palladium"];
 async function getMetalPrices(): Promise<MetalPrice[]> {
   try {
@@ -36,29 +35,39 @@ export default async function MetalPrices() {
   const metals = await getMetalPrices();
 
   return (
-    <div className="w-full p-1">
-      <Table className="w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>update</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {metals.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
-              </TableCell>
-              <TableCell>{item.price.toFixed(2)}$</TableCell>
-              <TableCell>
-                {new Date(item.updated * 1000).toLocaleTimeString()}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <>
+      {metals ? (
+        <div className="w-full p-1">
+          <Table className="w-full">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>update</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {metals.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
+                  </TableCell>
+                  <TableCell>{item.price.toFixed(2)}$</TableCell>
+                  <TableCell>
+                    {new Date(item.updated * 1000).toLocaleTimeString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      ) : (
+        <div className="w-full h-[300px] flex items-center justify-center">
+          <p className="text-sm font-semibold font-sans">
+            There was a problem. There is no information to display.
+          </p>
+        </div>
+      )}
+    </>
   );
 }

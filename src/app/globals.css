@@ -98,7 +98,7 @@
   /* Borders & Inputs */
   --border: oklch(0.92 0.004 286.32); /* Light gray border - approx #E2E8F0 */
   --input: oklch(0.92 0.004 286.32); /* Input borders */
-  --ring: oklch(0.705 0.015 286.067); /* Focus ring color */
+  --ring: oklch(70.566% 0.01449 285.949); /* Focus ring color */
   --sidebar-border: oklch(0.92 0.004 286.32); /* Sidebar border */
   --sidebar-ring: oklch(0.705 0.015 286.067); /* Sidebar focus ring */
 
@@ -111,11 +111,11 @@
   ); /* Green - for Positive Sentiment */
 
   /* Chart Colors (Default Shadcn/ui) */
-  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-1: oklch(64.71% 0.21732 36.839);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(82.901% 0.17115 81.038);
+  --chart-5: oklch(77.239% 0.17274 65.36);
 }
 
 .dark {
@@ -179,13 +179,14 @@
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-4: oklab(62.17% 0.14967 -0.21135);
   --chart-5: oklch(0.645 0.246 16.439);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scroll-behavior: smooth;
   }
   body {
     @apply bg-background text-foreground;
@@ -218,4 +219,20 @@
 .swiper-button-next::after {
   font-size: 1rem !important;
   font-weight: bold !important;
+}
+
+/* search select */
+.search-select {
+  animation: search 0.8s ease-in;
+}
+
+@keyframes search {
+  0% {
+    right: -100%;
+    opacity: 40;
+  }
+  100% {
+    right: 0;
+    opacity: 100;
+  }
 }

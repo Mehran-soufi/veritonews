@@ -1,6 +1,6 @@
 "use client";
-import { TopNewsType } from "@/app/page";
 import React, { useState } from "react";
+import { TopNewsType } from "@/typs/news";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
@@ -47,23 +47,30 @@ export default function Hero({ topNews }: { topNews: TopNewsType[] }) {
         >
           {topNews.map((item) => (
             <SwiperSlide key={item.id}>
-              <Link href="/" className="outline-none">
+              <Link
+                href={`/news/${item.id.toString()}`}
+                className="outline-none"
+                target="_blank"
+              >
                 <div className="relative w-full h-full">
                   <div className="w-full h-full">
-                    <VeritoImage image={item.image} />
+                    <VeritoImage image={item.image} alt="verito news" />
                   </div>
                   <div className="absolute bottom-0 left-0 bg-ring/60 w-full p-4">
                     <p className="font-semibold lg:text-center">{item.title}</p>
                   </div>
                   <div className="absolute top-2 left-2 bg-ring/40 p-2 rounded-xl">
-                    <div className="flex items-center gap-1">
-                      {item.authors.map((author, index) => (
-                        <div key={index} className="flex items-center gap-1">
-                          <p>{author}</p>
-                          {index < item.authors.length - 1 && <span>-</span>}
-                        </div>
-                      ))}
-                    </div>
+                    {item.authors && (
+                      <div className="flex items-center gap-1">
+                        {item.authors.map((author, index) => (
+                          <div key={index} className="flex items-center gap-1">
+                            <p>{author}</p>
+                            {item.authors &&
+                              index < item.authors.length - 1 && <span>-</span>}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </Link>
@@ -105,7 +112,7 @@ export default function Hero({ topNews }: { topNews: TopNewsType[] }) {
                     : "opacity-60"
                 }`}
               >
-                <VeritoImage image={item.image} />
+                <VeritoImage image={item.image} alt="verito news" />
               </div>
             </SwiperSlide>
           ))}
